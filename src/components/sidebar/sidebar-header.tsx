@@ -9,8 +9,8 @@ interface SidebarHeaderProps {
 export function SidebarHeader({ store }: SidebarHeaderProps) {
   return (
     <SidebarHeaderUI className="items-center mt-4">
-      <Image src={store.logoURL} width={180} height={50} alt="" />
-      <h1 className="text-lg font-semibold">{store.name}</h1>
+      <Image src={store.logoURL} width={180} height={50} alt="Logo da Loja" />
+      <span className="text-lg font-semibold">{store.name}</span>
     </SidebarHeaderUI>
   );
 }

@@ -16,7 +16,7 @@ export function MenuItem({ item }: { item: SidebarLinkType }) {
         asChild
         className="hover:bg-sidebar-primary/15 hover:text-sidebar-primary transition-colors flex items-center gap-2"
       >
-        <a href={item.url}>
+        <a href={`/painel${item.url}`}>
           <item.icon />
           <span>{item.title}</span>
         </a>
