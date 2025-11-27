@@ -11,6 +11,7 @@ export function Logo() {
         sizes="100vw"
         alt="Logotipo Pede Fácil"
         className="object-contain w-auto h-20"
+        priority
       />
     </div>
   );

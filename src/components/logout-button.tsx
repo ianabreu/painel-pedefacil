@@ -1,10 +1,10 @@
 "use client";
-import { signOut } from "next-auth/react";
 import { Button } from "@/components/ui/button";
+import { signOut } from "@/services/auth.service";
 
 export function LogoutButton() {
-  function handleLogout() {
-    signOut({ redirect: true, callbackUrl: "/login" });
+  async function handleLogout() {
+    await signOut();
   }
   return <Button onClick={handleLogout}>Sair</Button>;
 }

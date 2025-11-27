@@ -2,9 +2,6 @@ import type { Metadata } from "next";
 import { SidebarProvider } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/sidebar";
 import { Header } from "@/components/header";
-import { getServerSession } from "next-auth";
-import { nextAuthOptions } from "@/app/api/auth/[...nextauth]/route";
-import { redirect } from "next/navigation";
 
 export const metadata: Metadata = {
   title: "Pede Fácil - Painel",
@@ -16,17 +13,12 @@ export default async function PrivateLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const session = await getServerSession(nextAuthOptions);
-
-  if (!session) {
-    redirect("/login");
-  }
   return (
     <SidebarProvider>
       <AppSidebar />
-      <div className="w-full min-h-screen">
+      <div className="min-h-screen bg-amber-400 flex flex-col">
         <Header />
-        <main className="p-4">{children}</main>
+        <main className="p-4 flex-1">{children}</main>
       </div>
     </SidebarProvider>
   );

@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import { Poppins } from "next/font/google";
 import "./globals.css";
 import { cn } from "@/lib/utils";
-import { SessionProvider } from "@/providers/SessionProvider";
 
 const poppins = Poppins({
   subsets: ["latin"],
@@ -28,7 +27,7 @@ export default function RootLayout({
           poppins.variable
         )}
       >
-        <SessionProvider>{children}</SessionProvider>
+        {children}
       </body>
     </html>
   );

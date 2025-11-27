@@ -6,15 +6,15 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "../ui/button";
 import Link from "next/link";
 import { Input } from "../ui/input";
-import { signIn } from "next-auth/react";
 import { Loader } from "lucide-react";
-import { registerNewTenant } from "@/actions/registerNewTenant";
+import { signUp } from "@/services/auth.service";
 
 export function RegisterForm() {
   const {
     register,
     handleSubmit,
     setError,
+    clearErrors,
     formState: { errors, isSubmitting },
   } = useForm<RegisterFormData>({
     resolver: zodResolver(RegisterSchema),
@@ -25,21 +25,22 @@ export function RegisterForm() {
   const router = useRouter();
 
   async function onSubmit(formData: RegisterFormData) {
-    const data = await registerNewTenant(formData);
-    if (!data) {
-      setError("root", {
-        type: "server",
-        message: "Erro ao criar a conta. Tente novamente.",
-      });
-      return;
+    try {
+      const isAuth = await signUp(formData);
+      if (isAuth) {
+        router.replace("/painel");
+        return;
+      }
+    } catch (err) {
+      if (err instanceof Error) {
+        setError("root", { message: err?.message });
+      } else {
+        setError("root", { message: "Algo deu errado! Tente novamente" });
+      }
     }
-    await signIn("credentials", {
-      email: formData.email,
-      password: formData.password,
-      redirect: false,
-    });
-
-    router.replace("/painel");
+    setTimeout(() => {
+      clearErrors("root");
+    }, 3000);
   }
 
   return (

@@ -14,6 +14,7 @@ export function Header() {
         height={0}
         sizes="50vw"
         className="h-12 w-fit object-contain"
+        priority
       />
     </header>
   );

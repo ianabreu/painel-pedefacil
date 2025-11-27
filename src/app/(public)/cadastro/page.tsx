@@ -11,39 +11,3 @@ export default async function RegisterPage() {
     </main>
   );
 }
-
-/*
-"use client";
-import { Button } from "@/components/ui/button";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import Link from "next/link";
-import { RegisterFormData, RegisterSchema } from "@/schemas";
-import { api } from "@/services/api";
-import { Input } from "@/components/ui/input";
-
-export default function RegisterPage() {
-  const { register, handleSubmit } = useForm<RegisterFormData>({
-    resolver: zodResolver(RegisterSchema),
-    mode: "onSubmit",
-  });
-
-  async function onSubmit({
-    email,
-    password,
-    employeeName,
-    tenantName,
-  }: RegisterFormData) {
-    try {
-      const result = await api.post("/admin/register", {
-        email,
-        employeeName,
-        tenantName,
-        password,
-      });
-      console.log(result);
-    } catch (error) {
-      console.log(error);
-    }
-  }
- */

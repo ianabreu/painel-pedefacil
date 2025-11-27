@@ -1,14 +1,14 @@
 "use client";
 
-import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { LoginFormData, LoginSchema } from "@/schemas";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Button } from "../ui/button";
-import Link from "next/link";
+import { signIn } from "@/services/auth.service";
+import { useRouter } from "next/navigation";
 import { Input } from "../ui/input";
-import { signIn } from "next-auth/react";
+import { Button } from "../ui/button";
 import { Loader } from "lucide-react";
+import Link from "next/link";
 
 export function AuthForm() {
   const {
@@ -22,28 +22,24 @@ export function AuthForm() {
     mode: "onSubmit",
     shouldFocusError: true,
   });
-
   const router = useRouter();
   async function onSubmit({ email, password }: LoginFormData) {
-    const result = await signIn("credentials", {
-      redirect: false,
-      email,
-      password,
-    });
-    if (result?.error) {
-      let message = "Credenciais inválidas";
-      if (result.status === 401) {
-        setError("root", { message });
-      } else {
-        message = "Ocorreu um erro. Tente novamente mais tarde.";
-        setError("root", { message });
+    try {
+      const isAuth = await signIn({ email, password });
+      if (isAuth) {
+        router.replace("/painel");
+        return;
       }
-      setTimeout(() => {
-        clearErrors("root");
-      }, 3000);
-      return;
+    } catch (err) {
+      if (err instanceof Error) {
+        setError("root", { message: err?.message });
+      } else {
+        setError("root", { message: "Algo deu errado! Tente novamente" });
+      }
     }
-    router.replace("/painel");
+    setTimeout(() => {
+      clearErrors("root");
+    }, 3000);
   }
 
   return (
