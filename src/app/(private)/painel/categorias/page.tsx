@@ -8,17 +8,20 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { getAllCategories } from "./_actions/get-category";
+import { getCategories } from "@/services/category.service";
+import { DataTableDemo } from "./_actions/teste";
 
 export default async function CategoryPage() {
-  const categories = await getAllCategories();
+  const { results, limit, page, total } = await getCategories();
   return (
     <div>
       <div className="flex justify-between">
         <h2>Categorias</h2>
         <Button>Nova Categoria</Button>
       </div>
-      <Table>
+      <DataTableDemo />
+
+      {/* { <Table>
         <TableCaption>A list of your recent invoices.</TableCaption>
         <TableHeader>
           <TableRow>
@@ -29,20 +32,20 @@ export default async function CategoryPage() {
           </TableRow>
         </TableHeader>
         <TableBody>
-          {categories.map((category) => (
+          {results.map((category) => (
             <TableRow key={category.id}>
-              <TableCell>{category.sequence}</TableCell>
+              <TableCell>{category.position}</TableCell>
               <TableCell>{category.name}</TableCell>
               <TableCell>
-                {category.status === "active" ? "Ativo" : "Inativo"}
+                {category.status === "ACTIVE" ? "Ativo" : "Inativo"}
               </TableCell>
               <TableCell>
-                {/* Actions such as Edit/Delete can be added here */}
+               
               </TableCell>
             </TableRow>
           ))}
         </TableBody>
-      </Table>
+      </Table>*/}
     </div>
   );
 }

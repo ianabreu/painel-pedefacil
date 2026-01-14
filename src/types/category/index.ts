@@ -1,8 +1,9 @@
 export type Category = {
   id: string;
-  sequence: number;
+  position: number;
   name: string;
-  status: CategoryStatus;
+  slug: string;
+  status: CATEGORY_STATUS;
 };
 
-type CategoryStatus = "active" | "inactive";
+export type CATEGORY_STATUS = "ACTIVE" | "INACTIVE";

@@ -16,9 +16,9 @@ export default async function PrivateLayout({
   return (
     <SidebarProvider>
       <AppSidebar />
-      <div className="min-h-screen bg-amber-400 flex flex-col">
+      <div className="min-h-screen flex-1">
         <Header />
-        <main className="p-4 flex-1">{children}</main>
+        <main className="p-4">{children}</main>
       </div>
     </SidebarProvider>
   );
