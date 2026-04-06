@@ -53,22 +53,22 @@ export function RegisterForm() {
         onSubmit={handleSubmit(onSubmit)}
       >
         <Input
-          {...register("tenantName", { required: true })}
-          id="tenantName"
+          {...register("store_name", { required: true })}
+          id="store_name"
           type="text"
           placeholder="Digite aqui o nome do estabelecimento"
-          name="tenantName"
+          name="store_name"
           label="Nome do estabelecimento"
-          error={errors.tenantName?.message}
+          error={errors.store_name?.message}
         />
         <Input
-          {...register("employeeName", { required: true })}
-          id="employeeName"
+          {...register("user_name", { required: true })}
+          id="user_name"
           type="text"
           placeholder="Digite seu nome"
-          name="employeeName"
+          name="user_name"
           label="Nome"
-          error={errors.employeeName?.message}
+          error={errors.user_name?.message}
         />
         <Input
           {...register("email", { required: true })}

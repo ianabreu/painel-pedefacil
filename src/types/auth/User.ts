@@ -1,21 +1,26 @@
-import { Tenant } from "./Tenant";
+import { Store } from "./Store";
 
 enum ROLE {
-  ADMIN = "ADMIN",
+  ADMIN,
+  MANAGER,
+  SELLER,
 }
 enum STATUS {
   ACTIVE = "ACTIVE",
   INACTIVE = "INACTIVE",
 }
-export interface Employee {
+export interface User {
   id: string;
   email: string;
   name: string;
   role: ROLE;
   status: STATUS;
-  tenantId: string;
   createdAt: Date;
   updatedAt: Date;
-  accessToken: string;
-  tenant: Tenant;
+  storeId: string;
+  store: Store;
+}
+export interface LoginResponse {
+  access_token: string;
+  user: User;
 }

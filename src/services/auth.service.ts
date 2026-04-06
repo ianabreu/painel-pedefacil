@@ -2,23 +2,22 @@
 import { LoginFormData, RegisterFormData } from "@/schemas";
 import { api } from "./api";
 import { cookies } from "next/headers";
-import { AxiosError } from "axios";
 import { redirect } from "next/navigation";
-import { Employee } from "@/types/auth/Employee";
+import { LoginResponse } from "@/types/auth/User";
 
 type SignInProps = LoginFormData;
 type SignUpProps = RegisterFormData;
-type AuthResponse = Employee;
+type AuthResponse = LoginResponse;
 
 export async function signIn(credentials: SignInProps) {
   try {
     const response = await api.post<AuthResponse>("/auth/login", credentials);
-    if (!response.data.accessToken) {
+    if (!response.access_token) {
       return false;
     }
     const cookiesStore = await cookies();
     const expressTime = 60 * 1000;
-    cookiesStore.set("session", response.data.accessToken, {
+    cookiesStore.set("session", response.access_token, {
       maxAge: expressTime,
       path: "/",
       httpOnly: false,
@@ -27,25 +26,21 @@ export async function signIn(credentials: SignInProps) {
     return true;
   } catch (err) {
     const message = "Ops! Algo deu errado! Tente novamente";
-    if (err && err instanceof AxiosError) {
-      throw new Error(err.response?.data.message || message);
-    } else {
-      throw new Error(message);
-    }
+    throw new Error(message);
   }
 }
 export async function signUp(credentials: SignUpProps) {
   try {
     const response = await api.post<AuthResponse>(
       "/auth/register",
-      credentials
+      credentials,
     );
-    if (!response.data.accessToken) {
+    if (!response.access_token) {
       return false;
     }
     const cookiesStore = await cookies();
     const expressTime = 60 * 1000;
-    cookiesStore.set("session", response.data.accessToken, {
+    cookiesStore.set("session", response.access_token, {
       maxAge: expressTime,
       path: "/",
       httpOnly: false,
@@ -54,11 +49,7 @@ export async function signUp(credentials: SignUpProps) {
     return true;
   } catch (err) {
     const message = "Ops! Algo deu errado! Tente novamente";
-    if (err && err instanceof AxiosError) {
-      throw new Error(err.response?.data.message || message);
-    } else {
-      throw new Error(message);
-    }
+    throw new Error(message);
   }
 }
 export async function signOut() {
