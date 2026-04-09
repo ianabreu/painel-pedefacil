@@ -1,5 +1,5 @@
-import { RegisterForm } from "@/components/auth/RegisterForm";
 import { Logo } from "@/components/logo";
+import { RegisterForm } from "./_components/register-form";
 
 export default async function RegisterPage() {
   return (

@@ -20,7 +20,3 @@ export interface User {
   storeId: string;
   store: Store;
 }
-export interface LoginResponse {
-  access_token: string;
-  user: User;
-}
