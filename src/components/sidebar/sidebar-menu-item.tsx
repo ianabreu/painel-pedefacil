@@ -1,6 +1,12 @@
 import { LucideProps } from "lucide-react";
 import { SidebarMenuButton, SidebarMenuItem } from "../ui/sidebar";
 import { RefAttributes } from "react";
+import { cn } from "@/lib/utils";
+
+interface MenuItemProps {
+  item: SidebarLinkType;
+  active?: boolean;
+}
 
 export type SidebarLinkType = {
   title: string;
@@ -9,15 +15,22 @@ export type SidebarLinkType = {
     Omit<LucideProps, "ref"> & RefAttributes<SVGSVGElement>
   >;
 };
-export function MenuItem({ item }: { item: SidebarLinkType }) {
+
+export function MenuItem({ item, active = false }: MenuItemProps) {
+  const Icon = item.icon;
+
   return (
     <SidebarMenuItem>
       <SidebarMenuButton
         asChild
-        className="hover:bg-sidebar-primary/15 hover:text-sidebar-primary transition-colors flex items-center gap-2"
+        className={cn(
+          "flex items-center gap-2 transition-colors duration-300 text-foreground/70 text-sm",
+          "hover:bg-sidebar-primary/15 hover:text-sidebar-primary",
+          active && "bg-sidebar-primary/15 text-sidebar-primary",
+        )}
       >
-        <a href={`/painel${item.url}`}>
-          <item.icon />
+        <a href={item.url}>
+          <Icon />
           <span>{item.title}</span>
         </a>
       </SidebarMenuButton>

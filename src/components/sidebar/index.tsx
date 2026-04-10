@@ -1,81 +1,33 @@
+"use client";
 import {
   Sidebar,
   SidebarContent,
-  SidebarFooter,
+  SidebarHeader,
 } from "@/components/ui/sidebar";
-import {
-  Box,
-  Calendar,
-  ListTodo,
-  NotebookPen,
-  Store,
-  Tags,
-  Truck,
-  Wallet,
-} from "lucide-react";
 import { MenuGroup } from "./sidebar-menu-group";
-import { SidebarLinkType } from "./sidebar-menu-item";
-import { SidebarHeader } from "./sidebar-header";
-import { LogoutButton } from "@/components/logout-button";
-
-const productConfigLinks: SidebarLinkType[] = [
-  {
-    title: "Pedidos",
-    url: "/",
-    icon: NotebookPen,
-  },
-  {
-    title: "Categorias",
-    url: "/categorias",
-    icon: Tags,
-  },
-  {
-    title: "Produtos",
-    url: "/produtos",
-    icon: Box,
-  },
-];
-const storeConfigLinks: SidebarLinkType[] = [
-  {
-    title: "Loja",
-    url: "/loja",
-    icon: Store,
-  },
-  {
-    title: "Pedidos",
-    url: "/pedidos",
-    icon: ListTodo,
-  },
-  {
-    title: "Entrega",
-    url: "/entregas",
-    icon: Truck,
-  },
-  {
-    title: "Meios de Pagamento",
-    url: "/pagamentos",
-    icon: Wallet,
-  },
-  {
-    title: "Horário de Funcionamento",
-    url: "/horario",
-    icon: Calendar,
-  },
-];
+import Image from "next/image";
+import { ORDER_LINKS, PRODUCT_LINKS, STORE_LINKS } from "@/constants/links";
 
 export function AppSidebar() {
   return (
     <Sidebar>
-      <SidebarHeader
-        store={{ name: "Pizzaria Paraiso", logoURL: "/img/logo.png" }}
-      />
-      <SidebarContent>
-        <MenuGroup links={productConfigLinks} title="Cardápio" />
-        <MenuGroup links={storeConfigLinks} title="Configurações" />
+      <SidebarHeader className="items-center mt-4">
+        <Image
+          src={"/img/logo.png"}
+          width={0}
+          height={0}
+          alt="Pede Fácil Delivery"
+          sizes="50vw"
+          className="h-16 w-fit object-contain"
+          priority
+        />
+      </SidebarHeader>
+
+      <SidebarContent className="gap-0">
+        <MenuGroup links={ORDER_LINKS} title="Pedidos" />
+        <MenuGroup links={PRODUCT_LINKS} title="Cardápio" />
+        <MenuGroup links={STORE_LINKS} title="Configurações" />
       </SidebarContent>
-      <SidebarFooter>
-        <LogoutButton />
-      </SidebarFooter>
     </Sidebar>
   );
 }
