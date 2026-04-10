@@ -7,6 +7,7 @@ import { useActionState, useEffect } from "react";
 import { registerAction } from "../_actions/register.action";
 import { useRouter } from "next/navigation";
 import { ROUTES } from "@/constants/routes";
+import { Title } from "@/components/title";
 
 export function RegisterForm() {
   const [state, formAction, isPending] = useActionState(registerAction, null);
@@ -21,19 +22,9 @@ export function RegisterForm() {
 
   return (
     <>
-      <h2 className="font-bold text-2xl my-2 text-accent-foreground">
-        Criar conta
-      </h2>
-      <form className="flex flex-col w-full gap-2" action={formAction}>
-        <Input
-          label="Nome do estabelecimento"
-          id="store_name"
-          name="store_name"
-          required
-          minLength={3}
-          type="text"
-          placeholder="Digite aqui o nome do estabelecimento"
-        />
+      <Title className="my-2">Cadastro</Title>
+
+      <form className="flex flex-col w-full gap-4" action={formAction}>
         <Input
           label="Nome"
           id="user_name"
@@ -41,7 +32,7 @@ export function RegisterForm() {
           required
           minLength={3}
           type="text"
-          placeholder="Digite seu nome"
+          placeholder="Digite seu nome..."
         />
         <Input
           label="E-mail"
@@ -51,17 +42,21 @@ export function RegisterForm() {
           placeholder="Digite seu email..."
         />
         <Input
+          label="Nome da empresa"
+          id="store_name"
+          name="store_name"
+          required
+          minLength={3}
+          type="text"
+          placeholder="Digite o nome de sua empresa..."
+        />
+        <Input
           label="Senha"
           id="password"
           name="password"
           type="password"
           placeholder="Digite sua senha..."
         />
-        {state?.error && (
-          <span className="text-xs text-red-500 text-center">
-            {state.error}
-          </span>
-        )}
 
         <Button
           className="w-full mt-2"
@@ -77,11 +72,16 @@ export function RegisterForm() {
             "Criar conta"
           )}
         </Button>
+        {state?.error && (
+          <span className="text-xs text-red-500 text-center">
+            {state.error}
+          </span>
+        )}
       </form>
       <p className="text-center text-sm text-gray-700 mt-4">
-        Já possui uma conta?{" "}
+        Já tem cadastro?{" "}
         <Link className="text-primary hover:underline" href={ROUTES.LOGIN}>
-          Entre aqui
+          Faça login
         </Link>
       </p>
     </>

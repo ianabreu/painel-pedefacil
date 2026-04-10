@@ -8,6 +8,7 @@ import Link from "next/link";
 import { loginAction } from "../_actions/login.action";
 import { useActionState, useEffect } from "react";
 import { ROUTES } from "@/constants/routes";
+import { Title } from "@/components/title";
 
 export function LoginForm() {
   const [state, formAction, isPending] = useActionState(loginAction, null);
@@ -23,10 +24,10 @@ export function LoginForm() {
 
   return (
     <>
-      <h2 className="font-bold text-2xl my-2 text-accent-foreground">
-        Faça Login
-      </h2>
-      <form className="flex flex-col w-full gap-2" action={formAction}>
+      <Title className="my-2">Login</Title>
+      <p className="text-foreground/70">Bem vindo de volta!</p>
+
+      <form className="flex flex-col w-full gap-4" action={formAction}>
         <Input
           label="E-mail"
           id="email"
@@ -56,16 +57,18 @@ export function LoginForm() {
             "Acessar"
           )}
         </Button>
+        {state?.error && (
+          <span className="text-xs text-red-500 text-center">
+            {state.error}
+          </span>
+        )}
       </form>
-      <p className="text-center text-sm text-gray-700 mt-4">
-        Não tem cadastro?{" "}
+      <p className="text-center text-sm text-foreground mt-4">
+        Novo por aqui?{" "}
         <Link className="text-primary hover:underline" href={ROUTES.REGISTER}>
-          Registre aqui sua empresa.
+          Cadastre-se
         </Link>
       </p>
-      {state?.error && (
-        <span className="text-xs text-red-500 text-center">{state.error}</span>
-      )}
     </>
   );
 }
