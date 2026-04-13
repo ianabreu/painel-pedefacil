@@ -13,7 +13,7 @@ export async function setToken(token: string) {
   const cookieStore = await cookies();
   cookieStore.set(COOKIE_NAME, token, {
     httpOnly: true,
-    maxAge: 60 * 60 * 24 * 30,
+    maxAge: 60 * 60 * 24, // 1 dia
     path: "/",
     sameSite: true,
     secure: process.env.NODE_ENV === "production",
