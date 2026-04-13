@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { SidebarProvider } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/sidebar";
-import { Header } from "@/components/header";
+import { Header } from "@/components/header/header";
 import { getUser } from "@/lib/auth";
 import { redirect, RedirectType } from "next/navigation";
 import { ROUTES } from "@/constants/routes";
