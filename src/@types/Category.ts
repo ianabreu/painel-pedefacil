@@ -4,6 +4,17 @@ export type Category = {
   name: string;
   slug: string;
   status: CATEGORY_STATUS;
+  createdAt: Date;
+  updatedAt: Date;
+  storeId: string;
 };
 
-export type CATEGORY_STATUS = "ACTIVE" | "INACTIVE";
+export enum CATEGORY_STATUS {
+  ACTIVE = "ACTIVE",
+  INACTIVE = "INACTIVE",
+}
+
+export const CATEGORY_STATUS_LABELS: Record<CATEGORY_STATUS, string> = {
+  [CATEGORY_STATUS.ACTIVE]: "Ativo",
+  [CATEGORY_STATUS.INACTIVE]: "Inativo",
+};
