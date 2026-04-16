@@ -1,6 +1,8 @@
 export interface Pagination<T> {
-  results: T[];
-  total: number;
-  page: number;
-  limit: number;
+  data: T[];
+  meta: {
+    total: number;
+    page: number;
+    lastPage: number;
+  };
 }
