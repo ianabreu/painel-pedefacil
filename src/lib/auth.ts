@@ -1,7 +1,7 @@
 import { cookies } from "next/headers";
 import { apiClient } from "./api";
-import { User } from "@/@types/User";
-
+import { Payload, User } from "@/@types/User";
+import { verify } from "jsonwebtoken";
 const COOKIE_NAME = "token_painel_delivery";
 
 export async function getToken(): Promise<string | undefined> {
@@ -18,6 +18,9 @@ export async function setToken(token: string) {
     sameSite: true,
     secure: process.env.NODE_ENV === "production",
   });
+}
+export function decrypt(token: string): Payload {
+  return verify(token, process.env.JWT_SECRET as string) as Payload;
 }
 
 export async function removeToken() {

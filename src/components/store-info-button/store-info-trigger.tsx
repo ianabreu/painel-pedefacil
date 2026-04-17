@@ -7,7 +7,7 @@ interface StoreInfoProps {
 }
 export function StoreInfoTrigger({ user }: StoreInfoProps) {
   const userRoleLabel = ROLE_LABELS[user.role];
-  const avatarFallbackText = user.store.name.charAt(0).toUpperCase() || "PF";
+  const avatarFallbackText = user.name.charAt(0).toUpperCase() || "PF";
   return (
     <DropdownMenuTrigger asChild>
       <div className="flex cursor-pointer items-center justify-end gap-2 max-w-52 p-1 hover:bg-primary/10 rounded-lg transition-colors">
@@ -18,8 +18,10 @@ export function StoreInfoTrigger({ user }: StoreInfoProps) {
           </span>
         </div>
         <Avatar size="lg">
-          <AvatarImage src="https://github.com/ianabreu.png" />
-          <AvatarFallback>{avatarFallbackText}</AvatarFallback>
+          <AvatarImage src="https://github.com/asianabreu.png" />
+          <AvatarFallback className="bg-secondary/10 text-secondary">
+            {avatarFallbackText}
+          </AvatarFallback>
         </Avatar>
       </div>
     </DropdownMenuTrigger>

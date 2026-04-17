@@ -21,3 +21,5 @@ export const RegisterSchema = z.object({
     .min(3, "O nome do estabelecimento deve ter no mínimo 3 caracteres")
     .max(100, "O nome do estabelecimento deve ter no máximo 100 caracteres"),
 });
+
+export type RegisterDTO = z.infer<typeof RegisterSchema>;

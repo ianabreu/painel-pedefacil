@@ -5,65 +5,103 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Loader } from "lucide-react";
 import Link from "next/link";
-import { loginAction } from "../_actions/login.action";
-import { useActionState, useEffect } from "react";
+import { login } from "../_actions/login";
 import { ROUTES } from "@/constants/routes";
 import { Title } from "@/components/title";
+import { Controller, useForm } from "react-hook-form";
+import { Field, FieldError, FieldLabel } from "@/components/ui/field";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { LoginDTO, LoginSchema } from "../_validation/login.schema";
+import { toast } from "sonner";
+import { cn } from "@/lib/utils";
 
 export function LoginForm() {
-  const [state, formAction, isPending] = useActionState(loginAction, null);
   const router = useRouter();
 
-  useEffect(() => {
-    if (state?.success && state?.redirectTo) {
-      router.replace(state.redirectTo);
+  const form = useForm<LoginDTO>({
+    resolver: zodResolver(LoginSchema),
+    defaultValues: { email: "", password: "" },
+    mode: "onSubmit",
+  });
+
+  async function onSubmit(credentials: LoginDTO) {
+    const result = await login(credentials);
+
+    if (!result.success) {
+      form.reset();
+      toast.error(result.error || `Erro ao fazer login`);
+    } else {
+      form.reset();
+      toast.success(`Bem vindo(a) ao sistema ${result.data.name}.`);
+      router.replace(ROUTES.DASHBOARD);
     }
-    if (state?.error && state.error !== "") {
-    }
-  }, [state, router]);
+  }
 
   return (
     <>
       <Title className="my-2">Login</Title>
       <p className="text-foreground/70">Bem vindo de volta!</p>
 
-      <form className="flex flex-col w-full gap-4" action={formAction}>
-        <Input
-          label="E-mail"
-          id="email"
+      <form
+        className="flex flex-col w-full gap-2"
+        onSubmit={form.handleSubmit(onSubmit)}
+      >
+        <Controller
           name="email"
-          type="email"
-          placeholder="Digite seu email..."
+          control={form.control}
+          render={({ field, fieldState }) => (
+            <Field>
+              <FieldLabel htmlFor={field.name}>Email</FieldLabel>
+              <Input
+                {...field}
+                id={field.name}
+                aria-invalid={fieldState.invalid}
+                placeholder="Digite seu email..."
+                type="email"
+              />
+              {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
+            </Field>
+          )}
         />
-        <Input
-          label="Senha"
-          id="password"
+        <Controller
           name="password"
-          type="password"
-          placeholder="Digite sua senha..."
+          control={form.control}
+          render={({ field, fieldState }) => (
+            <Field>
+              <FieldLabel htmlFor={field.name}>Senha</FieldLabel>
+              <Input
+                {...field}
+                id={field.name}
+                aria-invalid={fieldState.invalid}
+                placeholder="Digite sua senha..."
+                type="password"
+              />
+              {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
+            </Field>
+          )}
         />
 
         <Button
-          className="w-full mt-2"
+          className={cn("w-full mt-2", "disabled:cursor-not-allowed")}
           variant={"default"}
+          size={"sm"}
           type="submit"
-          disabled={isPending}
+          disabled={form.formState.isSubmitting}
+          aria-disabled={form.formState.isSubmitting}
         >
-          {isPending ? (
-            <span className="animate-spin">
-              <Loader />
-            </span>
+          {form.formState.isSubmitting ? (
+            <>
+              Carregando...
+              <span className="animate-spin">
+                <Loader />
+              </span>
+            </>
           ) : (
             "Acessar"
           )}
         </Button>
-        {state?.error && (
-          <span className="text-xs text-red-500 text-center">
-            {state.error}
-          </span>
-        )}
       </form>
-      <p className="text-center text-sm text-foreground mt-4">
+      <p className="text-center text-sm text-foreground mt-2">
         Novo por aqui?{" "}
         <Link className="text-primary hover:underline" href={ROUTES.REGISTER}>
           Cadastre-se

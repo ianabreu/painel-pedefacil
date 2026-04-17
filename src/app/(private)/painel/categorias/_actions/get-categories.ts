@@ -1,8 +1,12 @@
 "use server";
 
+import { ApiResponse } from "@/@types/ApiResponse";
 import { Category } from "@/@types/Category";
+import { generateTag } from "@/constants/generateTag";
+import { ROUTES } from "@/constants/routes";
 import { apiClient } from "@/lib/api";
-import { getToken } from "@/lib/auth";
+import { decrypt, getToken } from "@/lib/auth";
+import { redirect } from "next/navigation";
 
 export enum OrderDirection {
   ASC = "asc",
@@ -12,15 +16,34 @@ export enum OrderDirection {
 interface SearchParams {
   search?: string;
 }
-export async function getCategories({ search }: SearchParams) {
+export async function getCategories({
+  search,
+}: SearchParams): Promise<ApiResponse<Category[]>> {
   const token = await getToken();
-  if (!token) throw new Error("Unauthorized");
-  let query = "";
-  if (search && search.trim() !== "") {
-    query = `?search=${search}`;
+  if (!token) redirect(ROUTES.LOGIN);
+
+  const { storeId } = decrypt(token);
+
+  const params = new URLSearchParams();
+  if (search?.trim()) {
+    params.append("search", search.trim());
   }
-  const categories = await apiClient<Category[]>(`/admin/categories${query}`, {
-    token,
-  });
-  return categories;
+  const queryString = params.toString() ? `?${params.toString()}` : "";
+  const endpoint = `/admin/categories${queryString}`;
+  try {
+    const categories = await apiClient<Category[]>(endpoint, {
+      token,
+      cache: "force-cache",
+      next: {
+        tags: [generateTag.categories(storeId)],
+        revalidate: 3600,
+      },
+    });
+    return { success: true, data: categories };
+  } catch {
+    return {
+      success: false,
+      error: "Falha ao carregar categorias. Tente novamente mais tarde.",
+    };
+  }
 }

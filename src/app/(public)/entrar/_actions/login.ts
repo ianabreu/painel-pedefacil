@@ -1,33 +1,23 @@
 "use server";
 
 import { apiClient } from "@/lib/api";
-import { LoginSchema } from "../_validation/login.schema";
-import { ROUTES } from "@/constants/routes";
+import { LoginDTO } from "../_validation/login.schema";
 import { AuthResponse } from "@/@types/AuthResponse";
 import { ZodError } from "zod";
 import { setToken } from "@/lib/auth";
+import { ApiResponse } from "@/@types/ApiResponse";
+import { User } from "@/@types/User";
 
-export async function loginAction(
-  prevState: { success: boolean; error: string; redirectTo?: string } | null,
-  formData: FormData,
-) {
+export async function login(credentials: LoginDTO): Promise<ApiResponse<User>> {
   try {
-    const email = formData.get("email") as string;
-    const password = formData.get("password") as string;
-
-    const data = LoginSchema.parse({
-      email,
-      password,
-    });
-
     const response = await apiClient<AuthResponse>("/auth/login", {
       method: "POST",
-      body: JSON.stringify(data),
+      body: JSON.stringify(credentials),
     });
 
     await setToken(response.access_token);
 
-    return { success: true, error: "", redirectTo: ROUTES.DASHBOARD };
+    return { success: true, data: response.user };
   } catch (error) {
     console.log(error);
 

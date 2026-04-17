@@ -1,36 +1,24 @@
 "use server";
 
 import { apiClient } from "@/lib/api";
-import { RegisterSchema } from "../_validation/register.schema";
-import { ROUTES } from "@/constants/routes";
+import { RegisterDTO } from "../_validation/register.schema";
 import { ZodError } from "zod";
 import { setToken } from "@/lib/auth";
 import { AuthResponse } from "@/@types/AuthResponse";
+import { ApiResponse } from "@/@types/ApiResponse";
+import { User } from "@/@types/User";
 
-export async function registerAction(
-  prevState: { success: boolean; error: string; redirectTo?: string } | null,
-  formData: FormData,
-) {
+export async function register(
+  credentials: RegisterDTO,
+): Promise<ApiResponse<User>> {
   try {
-    const user_name = formData.get("user_name") as string;
-    const store_name = formData.get("store_name") as string;
-    const email = formData.get("email") as string;
-    const password = formData.get("password") as string;
-
-    const data = RegisterSchema.parse({
-      user_name,
-      store_name,
-      email,
-      password,
-    });
-
     const response = await apiClient<AuthResponse>("/auth/register", {
       method: "POST",
-      body: JSON.stringify(data),
+      body: JSON.stringify(credentials),
     });
     await setToken(response.access_token);
 
-    return { success: true, error: "", redirectTo: ROUTES.DASHBOARD };
+    return { success: true, data: response.user };
   } catch (error) {
     console.log(error);
 
@@ -43,6 +31,7 @@ export async function registerAction(
     if (error instanceof Error) {
       return { success: false, error: error.message || "Erro ao cadastrar" };
     }
+
     return { success: false, error: "Erro ao cadastrar" };
   }
 }

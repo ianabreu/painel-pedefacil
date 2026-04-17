@@ -13,3 +13,5 @@ export const LoginSchema = z.object({
       "A senha deve conter pelo menos um caractere especial",
     ),
 });
+
+export type LoginDTO = z.infer<typeof LoginSchema>;

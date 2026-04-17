@@ -1,9 +1,9 @@
 import { Store } from "./Store";
 
 export enum USER_ROLE {
-  ADMIN,
-  MANAGER,
-  SELLER,
+  ADMIN = "ADMIN",
+  MANAGER = "MANAGER",
+  SELLER = "SELLER",
 }
 export enum USER_STATUS {
   ACTIVE = "ACTIVE",
@@ -26,3 +26,10 @@ export const ROLE_LABELS: Record<USER_ROLE, string> = {
   [USER_ROLE.MANAGER]: "Gerente",
   [USER_ROLE.SELLER]: "Vendedor",
 };
+
+export interface Payload {
+  sub: string;
+  storeId: string;
+  email: string;
+  role: USER_ROLE;
+}
