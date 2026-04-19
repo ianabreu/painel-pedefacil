@@ -4,7 +4,12 @@ import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Field, FieldError, FieldLabel } from "@/components/ui/field";
+import {
+  Field,
+  FieldDescription,
+  FieldError,
+  FieldLabel,
+} from "@/components/ui/field";
 import { Loader2 } from "lucide-react";
 import { DialogClose, DialogFooter } from "@/components/ui/dialog";
 import {
@@ -12,15 +17,27 @@ import {
   variationOptionSchema,
 } from "../_validation/variation-option.schema";
 import { Checkbox } from "@/components/ui/checkbox";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { Variation } from "@/@types/Variation";
 
 interface VariationOptionFormProps {
   defaultValues?: VariationOptionFormData;
   onSubmit: (data: VariationOptionFormData) => Promise<void>;
   submitText?: string;
   cancelText?: string;
+  variations: Variation[];
+  selectedVariation: Variation;
 }
 
 export function VariationOptionForm({
+  variations,
+  selectedVariation,
   defaultValues,
   onSubmit,
   submitText = "Salvar",
@@ -36,6 +53,7 @@ export function VariationOptionForm({
       description: "",
       acronym: "",
       allowMixingFlavors: false,
+      variationTypeId: selectedVariation.id,
     },
   });
 
@@ -53,7 +71,11 @@ export function VariationOptionForm({
               aria-invalid={fieldState.invalid}
               placeholder="Ex: Pizzas"
             />
-            {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
+            {fieldState.invalid ? (
+              <FieldError errors={[fieldState.error]} />
+            ) : (
+              <FieldDescription>Exemplo: Pequena, Média... </FieldDescription>
+            )}
           </Field>
         )}
       />
@@ -69,7 +91,37 @@ export function VariationOptionForm({
               aria-invalid={fieldState.invalid}
               placeholder="Ex: Pizzas"
             />
-            {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
+            {fieldState.invalid ? (
+              <FieldError errors={[fieldState.error]} />
+            ) : (
+              <FieldDescription>
+                Usado em impressões: P para Pequena...
+              </FieldDescription>
+            )}
+          </Field>
+        )}
+      />
+      <Controller
+        name="variationTypeId"
+        control={control}
+        render={({ field }) => (
+          <Field className="w-full">
+            <FieldLabel>Tipo</FieldLabel>
+            <Select
+              onValueChange={field.onChange}
+              defaultValue={field.value || ""}
+            >
+              <SelectTrigger>
+                <SelectValue placeholder="Escolha o tipo de variação" />
+              </SelectTrigger>
+              <SelectContent position={"item-aligned"}>
+                {variations.map((option) => (
+                  <SelectItem key={option.id} value={option.id}>
+                    {option.name}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
           </Field>
         )}
       />
@@ -92,6 +144,7 @@ export function VariationOptionForm({
           </Field>
         )}
       />
+
       <DialogFooter>
         <DialogClose asChild>
           <Button variant={"ghost"} className="text-foreground/70">

@@ -25,6 +25,7 @@ interface VariationListProps {
 }
 export function VariationList({ variations }: VariationListProps) {
   const [openModalType, setOpenModalType] = useState(false);
+  const [openModalOption, setOpenModalOption] = useState(false);
   const [selectedVariation, setSelectedVariation] = useState<Variation>(
     variations[0],
   );
@@ -40,13 +41,13 @@ export function VariationList({ variations }: VariationListProps) {
       setOpenModalType(false);
       toast.success(`Variação "${result.data.name}" criada com sucesso`);
     } else {
-      toast.error(`Erro ao criar variação.`);
+      toast.error(result.error || `Erro ao criar variação.`);
     }
   }
   async function handleCreateVariationOption(data: VariationOptionFormData) {
     const result = await createVariationOption(data);
     if (result.success) {
-      setOpenModalType(false);
+      setOpenModalOption(false);
       toast.success(`Opção "${result.data.description}" criada com sucesso`);
     } else {
       toast.error(result.error || `Erro ao criar opção de variação.`);
@@ -67,7 +68,7 @@ export function VariationList({ variations }: VariationListProps) {
             </DialogTrigger>
             <DialogContent aria-describedby={undefined}>
               <DialogHeader>
-                <DialogTitle>Novo Tipo</DialogTitle>
+                <DialogTitle>Novo tipo de variação</DialogTitle>
               </DialogHeader>
               <VariationForm
                 onSubmit={handleCreateVariationType}
@@ -93,7 +94,7 @@ export function VariationList({ variations }: VariationListProps) {
         <div className="flex w-full justify-between">
           <h2 className="text-xl font-semibold">{selectedVariation.name}</h2>
           <div className="w-full sm:w-fit">
-            <Dialog>
+            <Dialog open={openModalOption} onOpenChange={setOpenModalOption}>
               <DialogTrigger asChild>
                 <Button size={"sm"}>
                   <Plus /> Adicionar Variação
@@ -101,11 +102,13 @@ export function VariationList({ variations }: VariationListProps) {
               </DialogTrigger>
               <DialogContent aria-describedby={undefined}>
                 <DialogHeader>
-                  <DialogTitle>Novo Tipo</DialogTitle>
+                  <DialogTitle>Nova opção de variação</DialogTitle>
                 </DialogHeader>
                 <VariationOptionForm
+                  selectedVariation={selectedVariation}
                   onSubmit={handleCreateVariationOption}
                   submitText="Salvar"
+                  variations={variations}
                 />
               </DialogContent>
             </Dialog>
