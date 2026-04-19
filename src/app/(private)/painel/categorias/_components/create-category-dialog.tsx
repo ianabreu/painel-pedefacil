@@ -35,7 +35,7 @@ export function CreateCategoryDialog() {
           <Plus /> Nova Categoria
         </Button>
       </DialogTrigger>
-      <DialogContent>
+      <DialogContent aria-describedby={undefined}>
         <DialogHeader>
           <DialogTitle>Nova Categoria</DialogTitle>
           <DialogDescription>

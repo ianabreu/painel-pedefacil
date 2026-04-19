@@ -39,7 +39,7 @@ export function EditCategoryDialog({ category }: EditCategoryProps) {
           <Pencil className="h-4 w-4" />
         </Button>
       </DialogTrigger>
-      <DialogContent>
+      <DialogContent aria-describedby={undefined}>
         <DialogHeader>
           <DialogTitle>Editar Categoria</DialogTitle>
         </DialogHeader>
