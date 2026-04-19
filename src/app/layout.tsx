@@ -3,6 +3,7 @@ import { Poppins } from "next/font/google";
 import "./globals.css";
 import { cn } from "@/lib/utils";
 import { Toaster } from "@/components/ui/sonner";
+import { ConfirmProvider } from "@/contexts/confirm-context";
 
 const poppins = Poppins({
   subsets: ["latin"],
@@ -28,8 +29,10 @@ export default function RootLayout({
           poppins.variable,
         )}
       >
-        {children}
-        <Toaster richColors />
+        <ConfirmProvider>
+          {children}
+          <Toaster richColors />
+        </ConfirmProvider>
       </body>
     </html>
   );

@@ -11,21 +11,30 @@ import { ExternalLink, GripVertical, Trash } from "lucide-react";
 import { EditCategoryDialog } from "./edit-category-dialog";
 import { deleteCategory } from "../_actions/delete-category";
 import { toast } from "sonner";
+import { useConfirm } from "@/hooks/use-confirm";
 
 interface CategoryItemProps {
   category: Category;
 }
 export function CategoryItem({ category }: CategoryItemProps) {
   const status = CATEGORY_STATUS_LABELS[category.status];
+  const { confirm } = useConfirm();
 
   async function handleDelete(categoryId: string) {
-    const result = await deleteCategory(categoryId);
-    if (result.success) {
-      // setOpen(false);
-      toast.success("Categoria atualizada!");
-    } else {
-      toast.error(result.error || "Erro ao deletar categoria.");
-    }
+    confirm({
+      title: "Excluir Categoria",
+      description: `Você tem certeza que deseja excluir "${category.name}"? Esta ação é irreversível.`,
+      confirmText: "Excluir categoria",
+      variant: "danger",
+      onConfirm: async () => {
+        const result = await deleteCategory(categoryId);
+        if (result.success) {
+          toast.success("Categoria excluida com sucesso!");
+        } else {
+          toast.error(result.error || "Erro ao excluir categoria.");
+        }
+      },
+    });
   }
 
   return (
