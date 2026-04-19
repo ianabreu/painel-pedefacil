@@ -1,11 +1,10 @@
 import { Card } from "@/components/card";
 import { Title } from "@/components/title";
-import { CategoryItem } from "./_components/category-item";
 import { getCategories } from "./_actions/get-categories";
 import SearchInput from "@/components/search-input";
 import { cn } from "@/lib/utils";
-import { EmptyCategory } from "./_components/empty-category";
 import { CreateCategoryDialog } from "./_components/create-category-dialog";
+import { CategoryList } from "./_components/category-list";
 
 interface CategoryPageProps {
   searchParams: Promise<{ search?: string }>;
@@ -54,16 +53,7 @@ export default async function CategoryPage({
       </div>
       {/*List*/}
 
-      {categories.length === 0 && (
-        <div className="flex flex-col items-center gap-2">
-          <EmptyCategory isSearchActive={!!search} searchTerm={search} />
-          <CreateCategoryDialog />
-        </div>
-      )}
-      {categories.length > 0 &&
-        categories.map((category) => (
-          <CategoryItem key={category.id} category={category} />
-        ))}
+      <CategoryList categories={categories} />
     </Card>
   );
 }

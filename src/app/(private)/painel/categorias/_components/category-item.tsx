@@ -1,3 +1,4 @@
+"use client";
 import {
   Category,
   CATEGORY_STATUS,
@@ -6,13 +7,27 @@ import {
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
-import { Edit2, ExternalLink, GripVertical, Trash } from "lucide-react";
+import { ExternalLink, GripVertical, Trash } from "lucide-react";
+import { EditCategoryDialog } from "./edit-category-dialog";
+import { deleteCategory } from "../_actions/delete-category";
+import { toast } from "sonner";
 
 interface CategoryItemProps {
   category: Category;
 }
 export function CategoryItem({ category }: CategoryItemProps) {
   const status = CATEGORY_STATUS_LABELS[category.status];
+
+  async function handleDelete(categoryId: string) {
+    const result = await deleteCategory(categoryId);
+    if (result.success) {
+      // setOpen(false);
+      toast.success("Categoria atualizada!");
+    } else {
+      toast.error(result.error || "Erro ao deletar categoria.");
+    }
+  }
+
   return (
     <div className="flex flex-row w-full justify-between items-center bg-white border shadow-md rounded-lg p-2 gap-2">
       <div>
@@ -40,10 +55,18 @@ export function CategoryItem({ category }: CategoryItemProps) {
         </Badge>
       </div>
       <div className="flex gap-2 text-foreground/70">
-        <Button variant={"ghost"} size={"icon"}>
-          <Edit2 />
-        </Button>
-        <Button variant={"ghost"} size={"icon"}>
+        <EditCategoryDialog
+          category={{
+            id: category.id,
+            name: category.name,
+            status: category.status === CATEGORY_STATUS.ACTIVE ? true : false,
+          }}
+        />
+        <Button
+          variant={"ghost"}
+          size={"icon"}
+          onClick={() => handleDelete(category.id)}
+        >
           <Trash />
         </Button>
       </div>
