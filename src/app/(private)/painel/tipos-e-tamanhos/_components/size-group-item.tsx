@@ -41,58 +41,55 @@ export function SizeGroupItem({
   return (
     <div
       className={cn(
-        "flex w-full justify-between items-center px-2 rounded-lg h-9",
+        "flex w-full items-center px-2 rounded-lg h-9 transition-colors",
         "group overflow-hidden",
         isSelected
           ? "bg-primary/15 text-primary"
-          : "bg-transparent text-foreground",
+          : "bg-transparent text-foreground hover:bg-muted/50",
       )}
     >
-      <button
-        className="w-full text-start"
-        onClick={() => onSelect && onSelect(sizeGroup.id)}
-      >
-        <span className="text-sm font-medium w-full text-nowrap">
+      <div className="flex-1 min-w-0">
+        <button
+          className="w-full text-start text-sm font-medium truncate outline-none"
+          onClick={() => onSelect && onSelect(sizeGroup.id)}
+        >
           {sizeGroup.name}
-        </span>
-      </button>
-      <FormModal
-        title="Editar tipo de produto"
-        open={isOpen}
-        onOpenChange={setIsOpen}
-        trigger={
-          <Button
-            variant={isSelected ? "link" : "ghost"}
-            size={"icon-xs"}
-            className={cn(
-              isSelected ? "text-primary" : "text-foreground",
-              "opacity-0 translate-x-full pointer-events-none",
-              "transition-all duration-300 ease-out",
-              "group-hover:opacity-100 group-hover:translate-x-0 group-hover:pointer-events-auto",
-            )}
-          >
-            <Edit2 />
-          </Button>
-        }
-      >
-        <SizeGroupForm
-          onSubmit={handleEdit}
-          defaultValues={{ name: sizeGroup.name }}
-        />
-      </FormModal>
-      <Button
-        variant={isSelected ? "link" : "ghost"}
-        size={"icon-xs"}
-        onClick={handleDelete}
+        </button>
+      </div>
+      <div
         className={cn(
-          isSelected ? "text-primary" : "text-foreground",
-          "opacity-0 translate-x-full pointer-events-none",
-          "transition-all duration-300 ease-out",
-          "group-hover:opacity-100 group-hover:translate-x-0 group-hover:pointer-events-auto",
+          "flex items-center gap-1 ml-2 transition-all duration-200",
+          "opacity-0 group-hover:opacity-100 translate-x-2 group-hover:translate-x-0",
         )}
       >
-        <Trash2 />
-      </Button>
+        <FormModal
+          title="Editar tipo de produto"
+          open={isOpen}
+          onOpenChange={setIsOpen}
+          trigger={
+            <Button
+              variant={isSelected ? "link" : "ghost"}
+              size={"icon-xs"}
+              className={cn(isSelected ? "text-primary" : "text-foreground")}
+            >
+              <Edit2 />
+            </Button>
+          }
+        >
+          <SizeGroupForm
+            onSubmit={handleEdit}
+            defaultValues={{ name: sizeGroup.name }}
+          />
+        </FormModal>
+        <Button
+          variant={isSelected ? "link" : "ghost"}
+          size={"icon-xs"}
+          onClick={handleDelete}
+          className={cn(isSelected ? "text-primary" : "text-foreground")}
+        >
+          <Trash2 />
+        </Button>
+      </div>
     </div>
   );
 }

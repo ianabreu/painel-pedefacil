@@ -92,7 +92,7 @@ export function SizeManager({ sizeGroups }: SizeManagerProps) {
     );
   return (
     <div className="flex">
-      <section className="flex flex-col sm:max-w-3xs sm:w-full w-fit p-2 gap-2">
+      <section className="flex flex-col sm:max-w-[320px] sm:w-full w-fit p-2 gap-2">
         <div className="flex w-full justify-between items-center">
           <h2 className="text-lg font-semibold">Tipos de Produto</h2>
 
