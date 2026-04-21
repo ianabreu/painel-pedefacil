@@ -12,10 +12,6 @@ import {
 } from "@/components/ui/field";
 import { Loader2 } from "lucide-react";
 import { DialogClose, DialogFooter } from "@/components/ui/dialog";
-import {
-  VariationOptionFormData,
-  variationOptionSchema,
-} from "../_validation/variation-option.schema";
 import { Checkbox } from "@/components/ui/checkbox";
 import {
   Select,
@@ -24,20 +20,21 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Variation } from "@/@types/Variation";
+import { SizeGroup } from "@/@types/Size";
+import { SizeFormData, sizeSchema } from "../_validation/size.schema";
 
 interface VariationOptionFormProps {
-  defaultValues?: VariationOptionFormData;
-  onSubmit: (data: VariationOptionFormData) => Promise<void>;
+  defaultValues?: SizeFormData;
+  onSubmit: (data: SizeFormData) => Promise<void>;
   submitText?: string;
   cancelText?: string;
-  variations: Variation[];
-  selectedVariation: Variation;
+  sizeGroups: SizeGroup[];
+  selectedSizeGroup: SizeGroup;
 }
 
-export function VariationOptionForm({
-  variations,
-  selectedVariation,
+export function SizeForm({
+  sizeGroups,
+  selectedSizeGroup,
   defaultValues,
   onSubmit,
   submitText = "Salvar",
@@ -47,13 +44,13 @@ export function VariationOptionForm({
     control,
     handleSubmit,
     formState: { isSubmitting },
-  } = useForm<VariationOptionFormData>({
-    resolver: zodResolver(variationOptionSchema),
+  } = useForm<SizeFormData>({
+    resolver: zodResolver(sizeSchema),
     defaultValues: defaultValues || {
       description: "",
       acronym: "",
       allowMixingFlavors: false,
-      variationTypeId: selectedVariation.id,
+      sizeGroupId: selectedSizeGroup.id,
     },
   });
 
@@ -102,7 +99,7 @@ export function VariationOptionForm({
         )}
       />
       <Controller
-        name="variationTypeId"
+        name="sizeGroupId"
         control={control}
         render={({ field }) => (
           <Field className="w-full">
@@ -115,7 +112,7 @@ export function VariationOptionForm({
                 <SelectValue placeholder="Escolha o tipo de variação" />
               </SelectTrigger>
               <SelectContent position={"item-aligned"}>
-                {variations.map((option) => (
+                {sizeGroups.map((option) => (
                   <SelectItem key={option.id} value={option.id}>
                     {option.name}
                   </SelectItem>

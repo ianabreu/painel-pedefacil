@@ -1,43 +1,43 @@
 "use client";
-import { Variation } from "@/@types/Variation";
+import { SizeGroup } from "@/@types/Size";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { Edit2 } from "lucide-react";
 
-interface VariationTypeItemProps {
-  variation: Variation;
-  selected?: boolean;
-  onClick: (variationTypeId: string) => void;
+interface SizeGroupItemProps {
+  sizeGroup: SizeGroup;
+  isSelected?: boolean;
+  onSelect?: (id: string) => void;
 }
-export function VariationRow({
-  variation,
-  selected = false,
-  onClick,
-}: VariationTypeItemProps) {
+export function SizeGroupItem({
+  sizeGroup,
+  isSelected = false,
+  onSelect,
+}: SizeGroupItemProps) {
   return (
     <div
       className={cn(
         "flex w-full justify-between items-center px-2 rounded-lg h-9",
         "group overflow-hidden",
-        selected
+        isSelected
           ? "bg-primary/15 text-primary"
           : "bg-transparent text-foreground",
       )}
     >
       <button
         className="w-full text-start"
-        onClick={() => onClick(variation.id)}
+        onClick={() => onSelect && onSelect(sizeGroup.id)}
       >
         <span className="text-sm font-medium w-full text-nowrap">
-          {variation.name}
+          {sizeGroup.name}
         </span>
       </button>
       <Button
-        variant={selected ? "link" : "ghost"}
+        variant={isSelected ? "link" : "ghost"}
         size={"icon-xs"}
-        onClick={() => alert(variation.name)}
+        onClick={() => alert(sizeGroup.name)}
         className={cn(
-          selected ? "text-primary" : "text-foreground",
+          isSelected ? "text-primary" : "text-foreground",
           "opacity-0 translate-x-full pointer-events-none",
           "transition-all duration-300 ease-out",
           "group-hover:opacity-100 group-hover:translate-x-0 group-hover:pointer-events-auto",

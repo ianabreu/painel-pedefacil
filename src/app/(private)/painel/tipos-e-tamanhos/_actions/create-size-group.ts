@@ -1,38 +1,39 @@
 "use server";
 
 import { ApiResponse } from "@/@types/ApiResponse";
+import { SizeGroup } from "@/@types/Size";
 import { generateTag } from "@/constants/generateTag";
 import { ROUTES } from "@/constants/routes";
 import { apiClient } from "@/lib/api";
 import { decrypt, getToken } from "@/lib/auth";
 import { revalidateTag } from "next/cache";
 import { redirect } from "next/navigation";
-import { VariationOption } from "@/@types/Variation";
-import { VariationOptionFormData } from "../_validation/variation-option.schema";
+import { SizeGroupFormData } from "../_validation/size-group.schema";
 
-export async function createVariationOption(
-  data: VariationOptionFormData,
-): Promise<ApiResponse<VariationOption>> {
+export async function createSizeGroup({
+  name,
+}: SizeGroupFormData): Promise<ApiResponse<SizeGroup>> {
   const token = await getToken();
   if (!token) redirect(ROUTES.LOGIN);
 
   const { storeId } = decrypt(token);
 
-  const endpoint = "/admin/variations/items";
+  const endpoint = "/admin/size-groups";
   try {
-    const variationOption = await apiClient<VariationOption>(endpoint, {
+    const sizeGroup = await apiClient<SizeGroup>(endpoint, {
       method: "POST",
-      body: JSON.stringify(data),
+      body: JSON.stringify({ name }),
       token,
     });
-    revalidateTag(generateTag.variationsTypes(storeId), {
+    revalidateTag(generateTag.sizeGroups(storeId), {
       expire: 0,
     });
-    return { success: true, data: variationOption };
+    return { success: true, data: sizeGroup };
   } catch (error) {
+    console.log(error);
     if (error instanceof Error) {
       return { success: false, error: error.message };
     }
-    return { success: false, error: "Erro ao cadastrar opção de variação." };
+    return { success: false, error: "Erro ao cadastrar grupo de tamanhos" };
   }
 }

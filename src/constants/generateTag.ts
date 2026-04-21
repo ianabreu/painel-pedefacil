@@ -1,5 +1,5 @@
 export const generateTag = {
   categories: (storeId: string) => `store:${storeId}:categories`,
-  variationsTypes: (storeId: string) => `store:${storeId}:variation-types`,
+  sizeGroups: (storeId: string) => `store:${storeId}:size-groups`,
   products: (storeId: string) => `store:${storeId}:products`,
 } as const;

@@ -1,17 +1,17 @@
-interface Variation {
+interface SizeGroup {
   id: string;
   name: string;
   storeId: string;
-  variations: VariationOption[];
+  sizes: Size[];
 }
-interface VariationOption {
+interface Size {
   id: string;
   description: string;
   acronym: string;
   allowMixingFlavors: boolean;
-  variationTypeId: string;
+  sizeGroupId: string;
   createdAt: Date;
   updatedAt: Date;
 }
 
-export type { VariationOption, Variation };
+export type { Size, SizeGroup };

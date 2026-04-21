@@ -8,7 +8,7 @@ export const ROUTES = {
 
   PRODUCTS: `${dashboardLink}/produtos`,
   CATEGORIES: `${dashboardLink}/categorias`,
-  VARIATIONS: `${dashboardLink}/variacoes`,
+  VARIATIONS: `${dashboardLink}/tipos-e-tamanhos`,
   COMPLEMENTS: `${dashboardLink}/complementos`,
 };
 

@@ -1,11 +1,11 @@
 import { Card } from "@/components/card";
 import { Title } from "@/components/title";
-import { getVariations } from "./_actions/get-variations";
 import { cn } from "@/lib/utils";
-import { VariationList } from "./_components/variation-list";
+import { getSizeGroups } from "./_actions/get-size-groups";
+import { SizeManager } from "./_components/size-manager";
 
-export default async function VariationPage() {
-  const response = await getVariations();
+export default async function SizesPage() {
+  const response = await getSizeGroups();
   if (!response.success) {
     return (
       <Card className="flex flex-col gap-2">
@@ -15,7 +15,7 @@ export default async function VariationPage() {
       </Card>
     );
   }
-  const variations = response.data;
+  const sizeGroups = response.data;
 
   return (
     <Card className="flex flex-col gap-2">
@@ -26,14 +26,14 @@ export default async function VariationPage() {
         )}
       >
         <div className="flex flex-col gap-1 w-full">
-          <Title>Variações</Title>
-          <p className="text-foreground/70 text-sm text-nowrap">
-            Cadastre e gerencie as variações de produtos e suas opções de
-            tamanho.
+          <Title>Tipos e Tamanhos</Title>
+          <p className="text-foreground/70 text-sm">
+            Cadastre e gerencie os tipos de produtos e suas opções de tamanho.
           </p>
         </div>
       </div>
-      <VariationList variations={variations} />
+
+      <SizeManager sizeGroups={sizeGroups} />
     </Card>
   );
 }

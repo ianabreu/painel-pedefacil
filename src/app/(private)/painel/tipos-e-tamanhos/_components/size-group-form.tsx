@@ -8,18 +8,18 @@ import { Field, FieldError, FieldLabel } from "@/components/ui/field";
 import { Loader2 } from "lucide-react";
 import { DialogClose, DialogFooter } from "@/components/ui/dialog";
 import {
-  VariationFormData,
-  variationSchema,
-} from "../_validation/variation.schema";
+  SizeGroupFormData,
+  sizeGroupSchema,
+} from "../_validation/size-group.schema";
 
 interface VariationFormProps {
-  defaultValues?: VariationFormData;
-  onSubmit: (data: VariationFormData) => Promise<void>;
+  defaultValues?: SizeGroupFormData;
+  onSubmit: (data: SizeGroupFormData) => Promise<void>;
   submitText?: string;
   cancelText?: string;
 }
 
-export function VariationForm({
+export function SizeGroupForm({
   defaultValues,
   onSubmit,
   submitText = "Salvar",
@@ -29,8 +29,8 @@ export function VariationForm({
     control,
     handleSubmit,
     formState: { isSubmitting },
-  } = useForm<VariationFormData>({
-    resolver: zodResolver(variationSchema),
+  } = useForm<SizeGroupFormData>({
+    resolver: zodResolver(sizeGroupSchema),
     defaultValues: defaultValues || { name: "" },
   });
 

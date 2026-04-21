@@ -30,7 +30,7 @@ export const PRODUCT_LINKS: SidebarLinkType[] = [
     icon: Tags,
   },
   {
-    title: "Variações",
+    title: "Tipos e Tamanhos",
     url: ROUTES.VARIATIONS,
     icon: Box,
   },
