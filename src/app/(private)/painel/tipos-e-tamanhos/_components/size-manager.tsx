@@ -15,6 +15,7 @@ import { SizeForm } from "./size-form";
 import { SizeItem } from "./size-item";
 import { createSize } from "../_actions/create-size";
 import { EmptySizeGroup } from "./empty-size-group";
+import { updateSizeGroup } from "../_actions/update-size-group";
 
 interface SizeManagerProps {
   sizeGroups: SizeGroup[];
@@ -47,6 +48,16 @@ export function SizeManager({ sizeGroups }: SizeManagerProps) {
       toast.success("Tamanho adicionado com sucesso.");
     } else {
       toast.error(result.error || "Erro ao adicionar tamanho.");
+    }
+  }
+  async function onEditSizeGroup(id: string, formData: SizeGroupFormData) {
+    const result = await updateSizeGroup(id, formData);
+    if (result.success) {
+      setOpenModalGroup(false);
+      setSelectedId(result.data.id);
+      toast.success(`Tipo de produto atualizado com sucesso.`);
+    } else {
+      toast.error(result.error || "Erro ao atualizar tipo de produto.");
     }
   }
 
@@ -89,6 +100,7 @@ export function SizeManager({ sizeGroups }: SizeManagerProps) {
                 sizeGroup={item}
                 isSelected={selectedGroup.id === item.id}
                 onSelect={() => setSelectedId(item.id)}
+                onEdit={onEditSizeGroup}
               />
             )}
           />
