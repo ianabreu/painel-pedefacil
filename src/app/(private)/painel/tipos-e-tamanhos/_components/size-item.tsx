@@ -1,13 +1,30 @@
 "use client";
-import { Size } from "@/@types/Size";
+import { Size, SizeGroup } from "@/@types/Size";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { Edit2, Trash2 } from "lucide-react";
+import { SizeFormData } from "../_validation/size.schema";
+import { useState } from "react";
+import { FormModal } from "@/components/form-modal";
+import { SizeForm } from "./size-form";
 
 interface SizeItemProps {
   size: Size;
+  onEdit: (id: string, formData: SizeFormData) => Promise<void>;
+  onDelete: () => Promise<void>;
+  sizeGroup?: SizeGroup;
 }
-export function SizeItem({ size }: SizeItemProps) {
+export function SizeItem({ size, onDelete, onEdit, sizeGroup }: SizeItemProps) {
+  const [isOpen, setIsOpen] = useState(false);
+  async function handleEdit(data: SizeFormData) {
+    try {
+      await onEdit(size.id, data);
+      setIsOpen(false);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
   return (
     <div
       className={cn(
@@ -32,6 +49,26 @@ export function SizeItem({ size }: SizeItemProps) {
         >
           <Edit2 />
         </Button>
+        <FormModal
+          title="Editar tipo de produto"
+          open={isOpen}
+          onOpenChange={setIsOpen}
+          trigger={
+            <Button
+              variant={"ghost"}
+              size={"icon-xs"}
+              className={cn("text-foreground")}
+            >
+              <Edit2 />
+            </Button>
+          }
+        >
+          <SizeForm
+            onSubmit={handleEdit}
+            defaultValues={{ ...size }}
+            selectedSizeGroup={sizeGroup}
+          />
+        </FormModal>
         <Button variant={"ghost"} size={"icon-sm"}>
           <Trash2 />
         </Button>

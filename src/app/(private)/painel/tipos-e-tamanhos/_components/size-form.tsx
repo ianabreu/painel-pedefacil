@@ -28,8 +28,8 @@ interface VariationOptionFormProps {
   onSubmit: (data: SizeFormData) => Promise<void>;
   submitText?: string;
   cancelText?: string;
-  sizeGroups: SizeGroup[];
-  selectedSizeGroup: SizeGroup;
+  sizeGroups?: SizeGroup[];
+  selectedSizeGroup?: SizeGroup;
 }
 
 export function SizeForm({
@@ -50,7 +50,7 @@ export function SizeForm({
       description: "",
       acronym: "",
       allowMixingFlavors: false,
-      sizeGroupId: selectedSizeGroup.id,
+      sizeGroupId: selectedSizeGroup?.id,
     },
   });
 
@@ -100,6 +100,7 @@ export function SizeForm({
       />
       <Controller
         name="sizeGroupId"
+        disabled={!sizeGroups || sizeGroups.length === 0}
         control={control}
         render={({ field }) => (
           <Field className="w-full">
@@ -112,11 +113,17 @@ export function SizeForm({
                 <SelectValue placeholder="Escolha o tipo de variação" />
               </SelectTrigger>
               <SelectContent position={"item-aligned"}>
-                {sizeGroups.map((option) => (
-                  <SelectItem key={option.id} value={option.id}>
-                    {option.name}
+                {sizeGroups ? (
+                  sizeGroups.map((option) => (
+                    <SelectItem key={option.id} value={option.id}>
+                      {option.name}
+                    </SelectItem>
+                  ))
+                ) : (
+                  <SelectItem value={selectedSizeGroup?.id || "0"}>
+                    {selectedSizeGroup?.name}
                   </SelectItem>
-                ))}
+                )}
               </SelectContent>
             </Select>
           </Field>

@@ -18,6 +18,7 @@ import { EmptySizeGroup } from "./empty-size-group";
 import { updateSizeGroup } from "../_actions/update-size-group";
 import { useConfirm } from "@/hooks/use-confirm";
 import { deleteSizeGroup } from "../_actions/delete-size-group";
+import { updateSize } from "../_actions/update-size";
 
 interface SizeManagerProps {
   sizeGroups: SizeGroup[];
@@ -62,6 +63,7 @@ export function SizeManager({ sizeGroups }: SizeManagerProps) {
       toast.error(result.error || "Erro ao atualizar tipo de produto.");
     }
   }
+
   async function onDeleteSizeGroup(id: string, name: string) {
     confirm({
       title: "Excluir tipo de produto",
@@ -77,6 +79,15 @@ export function SizeManager({ sizeGroups }: SizeManagerProps) {
         }
       },
     });
+  }
+
+  async function onEditSize(id: string, formData: SizeFormData) {
+    const result = await updateSize(id, formData);
+    if (result.success) {
+      toast.success(`Tamanho atualizado com sucesso.`);
+    } else {
+      toast.error(result.error || "Erro ao atualizar tamanho.");
+    }
   }
 
   if (!selectedId)
@@ -157,7 +168,16 @@ export function SizeManager({ sizeGroups }: SizeManagerProps) {
               <List
                 items={selectedGroup.sizes}
                 keyExtractor={({ id }) => id}
-                renderItem={(item) => <SizeItem size={item} />}
+                renderItem={(item) => (
+                  <SizeItem
+                    size={item}
+                    onDelete={async () => {}}
+                    onEdit={onEditSize}
+                    sizeGroup={sizeGroups.find(
+                      (value) => item.sizeGroupId === value.id,
+                    )}
+                  />
+                )}
                 emptyComponent={
                   <p className="text-sm text-foreground/70 py-2">
                     Este tipo de produto ainda não possui tamanhos.
