@@ -19,6 +19,7 @@ import { updateSizeGroup } from "../_actions/update-size-group";
 import { useConfirm } from "@/hooks/use-confirm";
 import { deleteSizeGroup } from "../_actions/delete-size-group";
 import { updateSize } from "../_actions/update-size";
+import { deleteSize } from "../_actions/delete-size";
 
 interface SizeManagerProps {
   sizeGroups: SizeGroup[];
@@ -88,6 +89,22 @@ export function SizeManager({ sizeGroups }: SizeManagerProps) {
     } else {
       toast.error(result.error || "Erro ao atualizar tamanho.");
     }
+  }
+  async function onDeleteSize(id: string, description: string) {
+    confirm({
+      title: "Excluir tamanho",
+      description: `Você tem certeza que deseja excluir o tamanho '${description}'? Esta ação é irreversível.`,
+      confirmText: "Excluir tamanho",
+      variant: "danger",
+      onConfirm: async () => {
+        const result = await deleteSize(id);
+        if (result.success) {
+          toast.success("Tipo de produto excluido com sucesso!");
+        } else {
+          toast.error(result.error || "Erro ao excluir tipo de produto.");
+        }
+      },
+    });
   }
 
   if (!selectedId)
@@ -171,7 +188,7 @@ export function SizeManager({ sizeGroups }: SizeManagerProps) {
                 renderItem={(item) => (
                   <SizeItem
                     size={item}
-                    onDelete={async () => {}}
+                    onDelete={onDeleteSize}
                     onEdit={onEditSize}
                     sizeGroup={sizeGroups.find(
                       (value) => item.sizeGroupId === value.id,

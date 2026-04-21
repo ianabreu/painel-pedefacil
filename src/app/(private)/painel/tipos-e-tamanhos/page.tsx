@@ -3,7 +3,7 @@ import { Title } from "@/components/title";
 import { cn } from "@/lib/utils";
 import { getSizeGroups } from "./_actions/get-size-groups";
 import { SizeManager } from "./_components/size-manager";
-
+export const dynamic = "force-dynamic";
 export default async function SizesPage() {
   const response = await getSizeGroups();
   if (!response.success) {

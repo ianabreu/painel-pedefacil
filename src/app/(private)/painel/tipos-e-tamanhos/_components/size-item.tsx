@@ -11,7 +11,7 @@ import { SizeForm } from "./size-form";
 interface SizeItemProps {
   size: Size;
   onEdit: (id: string, formData: SizeFormData) => Promise<void>;
-  onDelete: () => Promise<void>;
+  onDelete: (id: string, description: string) => Promise<void>;
   sizeGroup?: SizeGroup;
 }
 export function SizeItem({ size, onDelete, onEdit, sizeGroup }: SizeItemProps) {
@@ -20,6 +20,13 @@ export function SizeItem({ size, onDelete, onEdit, sizeGroup }: SizeItemProps) {
     try {
       await onEdit(size.id, data);
       setIsOpen(false);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+  async function handleDelete() {
+    try {
+      await onDelete(size.id, size.description);
     } catch (error) {
       console.log(error);
     }
@@ -42,23 +49,12 @@ export function SizeItem({ size, onDelete, onEdit, sizeGroup }: SizeItemProps) {
         </div>
       </div>
       <div className="flex gap-2 text-foreground/70">
-        <Button
-          variant={"ghost"}
-          size={"icon-sm"}
-          onClick={() => alert(size.acronym)}
-        >
-          <Edit2 />
-        </Button>
         <FormModal
           title="Editar tipo de produto"
           open={isOpen}
           onOpenChange={setIsOpen}
           trigger={
-            <Button
-              variant={"ghost"}
-              size={"icon-xs"}
-              className={cn("text-foreground")}
-            >
+            <Button variant={"ghost"} size={"icon-sm"}>
               <Edit2 />
             </Button>
           }
@@ -69,7 +65,7 @@ export function SizeItem({ size, onDelete, onEdit, sizeGroup }: SizeItemProps) {
             selectedSizeGroup={sizeGroup}
           />
         </FormModal>
-        <Button variant={"ghost"} size={"icon-sm"}>
+        <Button variant={"ghost"} size={"icon-sm"} onClick={handleDelete}>
           <Trash2 />
         </Button>
       </div>
