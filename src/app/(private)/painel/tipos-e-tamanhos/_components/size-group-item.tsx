@@ -3,7 +3,7 @@ import { SizeGroup } from "@/@types/Size";
 import { FormModal } from "@/components/form-modal";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
-import { Edit2 } from "lucide-react";
+import { Edit2, Trash2 } from "lucide-react";
 import { SizeGroupForm } from "./size-group-form";
 import { SizeGroupFormData } from "../_validation/size-group.schema";
 import { useState } from "react";
@@ -13,18 +13,27 @@ interface SizeGroupItemProps {
   isSelected?: boolean;
   onSelect?: (id: string) => void;
   onEdit: (id: string, formData: SizeGroupFormData) => Promise<void>;
+  onDelete: (id: string, name: string) => Promise<void>;
 }
 export function SizeGroupItem({
   sizeGroup,
   isSelected = false,
   onSelect,
   onEdit,
+  onDelete,
 }: SizeGroupItemProps) {
   const [isOpen, setIsOpen] = useState(false);
   async function handleEdit(formData: SizeGroupFormData) {
     try {
       await onEdit(sizeGroup.id, formData);
       setIsOpen(false);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+  async function handleDelete() {
+    try {
+      await onDelete(sizeGroup.id, sizeGroup.name);
     } catch (error) {
       console.log(error);
     }
@@ -71,6 +80,19 @@ export function SizeGroupItem({
           defaultValues={{ name: sizeGroup.name }}
         />
       </FormModal>
+      <Button
+        variant={isSelected ? "link" : "ghost"}
+        size={"icon-xs"}
+        onClick={handleDelete}
+        className={cn(
+          isSelected ? "text-primary" : "text-foreground",
+          "opacity-0 translate-x-full pointer-events-none",
+          "transition-all duration-300 ease-out",
+          "group-hover:opacity-100 group-hover:translate-x-0 group-hover:pointer-events-auto",
+        )}
+      >
+        <Trash2 />
+      </Button>
     </div>
   );
 }

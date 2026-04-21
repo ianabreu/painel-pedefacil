@@ -16,6 +16,8 @@ import { SizeItem } from "./size-item";
 import { createSize } from "../_actions/create-size";
 import { EmptySizeGroup } from "./empty-size-group";
 import { updateSizeGroup } from "../_actions/update-size-group";
+import { useConfirm } from "@/hooks/use-confirm";
+import { deleteSizeGroup } from "../_actions/delete-size-group";
 
 interface SizeManagerProps {
   sizeGroups: SizeGroup[];
@@ -23,7 +25,7 @@ interface SizeManagerProps {
 export function SizeManager({ sizeGroups }: SizeManagerProps) {
   const [openModalGroup, setOpenModalGroup] = useState<boolean>(false);
   const [openModalSize, setOpenModalSize] = useState<boolean>(false);
-
+  const { confirm } = useConfirm();
   const [selectedId, setSelectedId] = useState<string | undefined>(
     sizeGroups[0]?.id,
   );
@@ -59,6 +61,22 @@ export function SizeManager({ sizeGroups }: SizeManagerProps) {
     } else {
       toast.error(result.error || "Erro ao atualizar tipo de produto.");
     }
+  }
+  async function onDeleteSizeGroup(id: string, name: string) {
+    confirm({
+      title: "Excluir tipo de produto",
+      description: `Você tem certeza que deseja excluir o tipo '${name}'? Esta ação é irreversível.`,
+      confirmText: "Excluir tipo de produto",
+      variant: "danger",
+      onConfirm: async () => {
+        const result = await deleteSizeGroup(id);
+        if (result.success) {
+          toast.success("Tipo de produto excluido com sucesso!");
+        } else {
+          toast.error(result.error || "Erro ao excluir tipo de produto.");
+        }
+      },
+    });
   }
 
   if (!selectedId)
@@ -101,6 +119,7 @@ export function SizeManager({ sizeGroups }: SizeManagerProps) {
                 isSelected={selectedGroup.id === item.id}
                 onSelect={() => setSelectedId(item.id)}
                 onEdit={onEditSizeGroup}
+                onDelete={onDeleteSizeGroup}
               />
             )}
           />
